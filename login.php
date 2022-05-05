@@ -13,6 +13,8 @@ if(isset($_POST["submit"])){
 		require 'connect.php';
 		$Account = $_POST['Account'];
 		$Password = $_POST['Password'];
+		$password_hash=hash("sha512", $Password);
+		echo $password_hash;
 		#$Password = md5($_POST['Password']);
 
 		$sql = "SELECT * FROM `mytable` Where (Account = ? AND Password = ?)";	
@@ -20,7 +22,7 @@ if(isset($_POST["submit"])){
 		#$sth = $db->query($sql);
 
 		$sth= $db->prepare($sql);
-		$sth->execute(array($Account,$Password));
+		$sth->execute(array($Account,$password_hash));
 		
 		$result = $sth->fetch(PDO::FETCH_OBJ);
 
@@ -108,7 +110,7 @@ if(isset($_POST["submit"])){
 
 
 				<!-- Start Sign In Form -->
-				<form action="#" method="POST" class="fh5co-form animate-box" data-animate-effect="fadeIn">
+				<form action="login.php" method="POST" class="fh5co-form animate-box" data-animate-effect="fadeIn">
 					<h2>Sign In</h2>
 					<div class="form-group">
 						<label for="Account" class="sr-only">Account</label>

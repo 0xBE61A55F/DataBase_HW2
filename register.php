@@ -175,7 +175,7 @@ if(isset($_POST["submit"]) && $_POST["submit"] == "Sign Up")
 						</div>
 				
 						<div class="form-group">
-							<p>Already registered? <a href="index.html">Sign In</a></p>
+							<p>Already registered? <a href="login.php">Sign In</a></p>
 						</div>
 						<div class="form-group">
 							<input type="submit" value="Sign Up" name="submit" class="btn btn-primary">

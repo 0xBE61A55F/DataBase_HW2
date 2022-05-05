@@ -6,7 +6,7 @@ try {
     Name VARCHAR(50) NOT NULL,
     Account VARCHAR(50) NOT NULL,
     PhoneNumber VARCHAR(10) NOT NULL,
-    Password VARCHAR(100) NOT NULL,
+    Password VARCHAR(1000) NOT NULL,
     Latitude float(50) NOT NULL,
     Longitude float(50) NOT NULL
     )";
