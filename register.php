@@ -8,44 +8,55 @@
 
 
 
-if(isset($_POST["enter"]) && $_POST["enter"] == "Sign Up")  
+if(isset($_POST["submit"]) && $_POST["submit"] == "Sign Up")  
 {	
 	include("connect.php");
 
-	$id = $_POST['id'];
-	$pw = $_POST['pw'];
-	$pw2 = $_POST['pw2'];
-	$telephone = $_POST['telephone'];
-	$address = $_POST['address'];
-	$latitude = $_POST['latitude'];
-	$longitude = $_POST['longitude'];
+	$name=$_POST['name'];
+	$phone=$_POST['phone'];
+	$account=$_POST['account'];
+	$pass=$_POST['pass'];
+	$password_hash=hash("sha512", $pass);
+	$repass=$_POST['repass'];
+	$latitude=$_POST['latitude'];
+	$longitude=$_POST['longitude'];
 
 
 
-	if($id == "" || $pw == "" || $pw2 == "" || $telephone == "" || $address == "" || $latitude == "" || $longitude == "")  
+	if($name == "" || $phone == "" || $account == "" || $pass == "" || $repass == "" || $latitude == "" || $longitude == "")  
 	{  
 		echo "<script>alert('請不要留空！'); history.go(-1);</script>";  
 	}
-	$sql = "insert into member_table values('$id','$pw','$telephone','$address','$latitude', '$longitude');";
-    	$stmt= $dbh -> query("select id from member_table where id='$id';");
+	#$sql = "insert into member_table values('$name','$phone','$account','$pass','$latitude', '$longitude');";
+    $insert = $db -> prepare("INSERT INTO mytable(Name,Account,PhoneNumber,Password,Latitude,Longitude)VALUES(?,?,?,?,?,?)");
+	
+
+	$stmt= $db -> prepare("select Account from mytable where Account = ? ");
+	$stmt->execute(array($account));
+
 	$row= $stmt -> fetch(PDO::FETCH_BOTH);
 	if(empty($row[0]))
 	{
-                $dbh->exec($sql);
-        	$dbh = null;
+        $insert -> execute(array($name,$account,$phone,$password_hash,$latitude,$longitude));
+        $db = null;
+
+		$_SESSION['LoginSuccess'] = True;
+		$_SESSION['uname'] = $name;
 ?>
 
 	<script>
 	alert("註冊成功!");
+	
 	window.location.href = "index.php";
 	</script>
 <?php
 
+	
 
         }
         else
         {
-                $dbh = null;
+            $db = null;
 
 ?>
 	<script>
@@ -127,46 +138,48 @@ if(isset($_POST["enter"]) && $_POST["enter"] == "Sign Up")
 					
 
 					<!-- Start Sign In Form -->
-					<form  action="register.php" method="POST" class="fh5co-form animate-box" data-animate-effect="fadeIn">
+					<form action="register.php" method="POST" class="fh5co-form animate-box" data-animate-effect="fadeIn">
 						<h2>Sign Up</h2>
 						<!-- <div class="form-group">
 							<div class="alert alert-success" role="alert">Your info has been saved.</div>
 						</div> -->
 						<div class="form-group">
-							<label for="name" class="sr-only">phonenumber</label>
-							<input type="text" class="form-control" id="telephone" placeholder="PhoneNumber" autocomplete="off" name="telephone">
+							<label for="name" class="sr-only">Name</label>
+							<input type="text" class="form-control" id="name" name="name" placeholder="Name" autocomplete="off">
+							
 						</div>
 						<div class="form-group">
-							<label for="address" class="sr-only">address</label>
-							<input type="text" class="form-control" id="address" placeholder="address" autocomplete="off" name="address">
+							<label for="name" class="sr-only">phonenumber</label>
+							<input type="text" class="form-control" id="phonenumber" name="phone" placeholder="PhoneNumber" autocomplete="off">
 						</div>
 						<div class="form-group">
 							<label for="Account" class="sr-only">Account</label>
-							<input type="text" class="form-control" id="id" placeholder="Account" autocomplete="off" name="id">
+							<input type="text" class="form-control" id="Account" name="account" placeholder="Account" autocomplete="off">
+							<p id="checkid">
 						</div>
 						<div class="form-group">
 							<label for="password" class="sr-only">Password</label>
-							<input type="password" class="form-control" id="pw" placeholder="Password" autocomplete="off" name="pw">
+							<input type="password" class="form-control" id="password" name="pass" placeholder="Password" autocomplete="off">
 						</div>
 						<div class="form-group">
 							<label for="re-password" class="sr-only">Re-type Password</label>
-							<input type="password" class="form-control" id="pw2" placeholder="Re-type Password" autocomplete="off" name="pw2">
+							<input type="password" class="form-control" id="re-password" name="repass" placeholder="Re-type Password" autocomplete="off">
 						</div>
 						<div class="form-group">
 							<label for="latitude" class="sr-only">latitude</label>
-							<input type="text" class="form-control" id="latitude" placeholder="Latitude" autocomplete="off" name="latitude">
+							<input type="text" class="form-control" id="latitude" name="latitude" placeholder="Latitude" autocomplete="off">
 						</div>
 						<div class="form-group">
 							<label for="longitude" class="sr-only">longitude</label>
-							<input type="text" class="form-control" id="longitude" placeholder="longitude" autocomplete="off" name="longitude">
+							<input type="text" class="form-control" id="longitude" name="longitude" placeholder="longitude" autocomplete="off">
 						</div>
 				
 						<div class="form-group">
-							<p>Already registered? <a href="index.php">Sign In</a></p>
+							<p>Already registered? <a href="index.html">Sign In</a></p>
 						</div>
 						<div class="form-group">
-							<input type="submit" name="enter" value="Sign Up" class="btn btn-primary">
-						</div> 
+							<input type="submit" value="Sign Up" name="submit" class="btn btn-primary">
+						</div>
 						
 					</form>
 					<!-- END Sign In Form -->
@@ -190,4 +203,36 @@ if(isset($_POST["enter"]) && $_POST["enter"] == "Sign Up")
 	<script src="js/main.js"></script>
 
 	</body>
+
+
+
+
+	<script>
+
+	$(function(){
+
+		$("#Account").blur(function(){
+			var uaccount = $("#Account").val();
+
+			$.ajax({
+				type:"POST",
+				url:"check.php",
+				data:{uaccount:uaccount},
+				dataType:"json",
+				success:function(msg){
+					if (msg.status == 1){
+						$("#checkid").html("此用戶名已被註冊！"); 
+						$("#checkid").css("color","red");
+					}else{
+						$("#checkid").html("此用戶名可以使用！"); 
+						$("#checkid").css("color","blue");
+					}
+				}
+			});
+
+		});
+
+	});
+
+</script>
 </html>

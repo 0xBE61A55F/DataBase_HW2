@@ -1,151 +1,480 @@
 <?php session_start(); ?>
+
 <?php
-if(isset($_POST["submit"])){
 
-	if( !isset($_POST['Account']) || !isset($_POST['Password']) || $_POST['Account']=="" || $_POST['Password']=="" ){
-		#header("location:index.php");
-	}else {
-		require 'connect.php';
-		$Account = $_POST['Account'];
-		$Password = $_POST['Password'];
-		#$Password = md5($_POST['Password']);
-
-		$sql = "SELECT * FROM `mytable` Where (Account = ? AND Password = ?)";	
-		#$sql = "SELECT * FROM `mytable` Where (Account ='$Account' AND Password = '$Password')";	
-		#$sth = $db->query($sql);
-
-		$sth= $db->prepare($sql);
-		$sth->execute(array($Account,$Password));
-		
-		$result = $sth->fetch(PDO::FETCH_OBJ);
-
-		if( $result ) {
-			$_SESSION['LoginSuccess'] = true;
-			header("location:nav.php"); 
-		}
-		else {
-			echo "<script language=javascript>alert('login failed !!');</script>";
-		}
-	$pdo = NULL;
-	}
+if ($_SESSION['LoginSuccess'] == False){
+	header("location:login.php");
+}else{
+	echo $_SESSION['uname'];
 }
 
 ?>
 
-<!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!-->
-<html class="no-js">
-<!--<![endif]-->
+<!doctype html>
+<html lang="en">
 
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Minimal and Clean Sign up / Login and Forgot Form by FreeHTML5.co</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="Free HTML5 Template by FreeHTML5.co" />
-	<meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
-	<meta name="author" content="FreeHTML5.co" />
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<!-- 
-	//////////////////////////////////////////////////////
+  <!-- Bootstrap CSS -->
 
-	FREE HTML5 TEMPLATE 
-	DESIGNED & DEVELOPED by FreeHTML5.co
-		
-	Website: 		http://freehtml5.co/
-	Email: 			info@freehtml5.co
-	Twitter: 		http://twitter.com/fh5co
-	Facebook: 		https://www.facebook.com/fh5co
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
-	//////////////////////////////////////////////////////
-	 -->
-
-	<!-- Facebook and Twitter integration -->
-	<meta property="og:title" content="" />
-	<meta property="og:image" content="" />
-	<meta property="og:url" content="" />
-	<meta property="og:site_name" content="" />
-	<meta property="og:description" content="" />
-	<meta name="twitter:title" content="" />
-	<meta name="twitter:image" content="" />
-	<meta name="twitter:url" content="" />
-	<meta name="twitter:card" content="" />
-
-	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-	<link rel="shortcut icon" href="favicon.ico">
-
-	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
-
-	<link rel="stylesheet" href="css/bootstrap.min.css">
-	<link rel="stylesheet" href="css/animate.css">
-	<link rel="stylesheet" href="css/style.css">
-
-
-	<!-- Modernizr JS -->
-	<script src="js/modernizr-2.6.2.min.js"></script>
-	<!-- FOR IE9 below -->
-	<!--[if lt IE 9]>
-	<script src="js/respond.min.js"></script>
-	<![endif]-->
-
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <title>Hello, world!</title>
 </head>
 
 <body>
+ 
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand " href="#">WebSiteName</a>
+		
+      </div>
+
+	  <a class="navbar-brand pull-right" href="logout.php">登出</a>
+
+    </div>
+  </nav>
+  <div class="container">
+
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#home">Home</a></li>
+      <li><a href="#menu1">shop</a></li>
 
 
-	<div class="container">
+    </ul>
 
-		<div class="row">
-			<div class="col-md-4 col-md-offset-4">
-
-
-				<!-- Start Sign In Form -->
-				<form action="#" method="POST" class="fh5co-form animate-box" data-animate-effect="fadeIn">
-					<h2>Sign In</h2>
-					<div class="form-group">
-						<label for="Account" class="sr-only">Account</label>
-						<input type="text" class="form-control" id="Account" placeholder="Account" name="Account" autocomplete="off">
-					</div>
-					<div class="form-group">
-						<label for="password" class="sr-only">Password</label>
-						<input type="password" class="form-control" id="password" placeholder="Password" name="Password" autocomplete="off">
-					</div>
-
-					<div class="form-group">
-						<p>Not registered? <a href="sign-up.html">Sign Up</a> </p>
-					</div>
-					<div class="form-group">
-						<input type="submit" value="Sign In" name="submit" class="btn btn-primary">
-					</div>
-				</form>
-				<!-- END Sign In Form -->
-
-			</div>
-		</div>
-		<div class="row" style="padding-top: 60px; clear: both;">
-			<div class="col-md-12 text-center">
-				<p><small>&copy; All Rights Reserved. Designed by <a href="https://freehtml5.co">FreeHTML5.co</a></small></p>
-			</div>
-		</div>
-	</div>
-
-	<!-- jQuery -->
-	<script src="js/jquery.min.js"></script>
-	<!-- Bootstrap -->
-	<script src="js/bootstrap.min.js"></script>
-	<!-- Placeholder -->
-	<script src="js/jquery.placeholder.min.js"></script>
-	<!-- Waypoints -->
-	<script src="js/jquery.waypoints.min.js"></script>
-	<!-- Main JS -->
-	<script src="js/main.js"></script>
+    <div class="tab-content">
+      <div id="home" class="tab-pane fade in active">
+        <h3>Profile</h3>
+        <div class="row">
+          <div class="col-xs-12">
+            Accouont: <?php echo $_SESSION['uname'];?>, user, PhoneNumber: 0912345678,  location: 24.786944626633865, 120.99753981198887
+            
+            <button type="button " style="margin-left: 5px;" class=" btn btn-info " data-toggle="modal"
+            data-target="#location">edit location</button>
+            <!--  -->
+            <div class="modal fade" id="location"  data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog  modal-sm">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">edit location</h4>
+                  </div>
+                  <div class="modal-body">
+                    <label class="control-label " for="latitude">latitude</label>
+                    <input type="text" class="form-control" id="latitude" placeholder="enter latitude">
+                      <br>
+                      <label class="control-label " for="longitude">longitude</label>
+                    <input type="text" class="form-control" id="longitude" placeholder="enter longitude">
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Edit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
 
 
 
+            <!--  -->
+            walletbalance: 100
+            <!-- Modal -->
+            <button type="button " style="margin-left: 5px;" class=" btn btn-info " data-toggle="modal"
+              data-target="#myModal">Add value</button>
+            <div class="modal fade" id="myModal"  data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog  modal-sm">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add value</h4>
+                  </div>
+                  <div class="modal-body">
+                    <input type="text" class="form-control" id="value" placeholder="enter add value">
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Add</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
+        </div>
+
+        <!-- 
+                
+             -->
+        <h3>Search</h3>
+        <div class=" row  col-xs-8">
+          <form class="form-horizontal" action="/action_page.php">
+            <div class="form-group">
+              <label class="control-label col-sm-1" for="Shop">Shop</label>
+              <div class="col-sm-5">
+                <input type="text" class="form-control" placeholder="Enter Shop name">
+              </div>
+              <label class="control-label col-sm-1" for="distance">distance</label>
+              <div class="col-sm-5">
+
+
+                <select class="form-control" id="sel1">
+                  <option>near</option>
+                  <option>medium </option>
+                  <option>far</option>
+
+                </select>
+              </div>
+
+            </div>
+
+            <div class="form-group">
+
+              <label class="control-label col-sm-1" for="Price">Price</label>
+              <div class="col-sm-2">
+
+                <input type="text" class="form-control">
+
+              </div>
+              <label class="control-label col-sm-1" for="~">~</label>
+              <div class="col-sm-2">
+
+                <input type="text" class="form-control">
+
+              </div>
+              <label class="control-label col-sm-1" for="Meal">Meal</label>
+              <div class="col-sm-5">
+                <input type="text" list="Meals" class="form-control" id="Meal" placeholder="Enter Meal">
+                <datalist id="Meals">
+                  <option value="Hamburger">
+                  <option value="coffee">
+                </datalist>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-1" for="category"> category</label>
+            
+              
+                <div class="col-sm-5">
+                  <input type="text" list="categorys" class="form-control" id="category" placeholder="Enter shop category">
+                  <datalist id="categorys">
+                    <option value="fast food">
+               
+                  </datalist>
+                </div>
+                <button type="submit" style="margin-left: 18px;"class="btn btn-primary">Search</button>
+              
+            </div>
+          </form>
+        </div>
+        <div class="row">
+          <div class="  col-xs-8">
+            <table class="table" style=" margin-top: 15px;">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                
+                  <th scope="col">shop name</th>
+                  <th scope="col">shop category</th>
+                  <th scope="col">Distance</th>
+               
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+               
+                  <td>macdonald</td>
+                  <td>fast food</td>
+                
+                  <td>near </td>
+                  <td>  <button type="button" class="btn btn-info " data-toggle="modal" data-target="#macdonald">Open menu</button></td>
+            
+                </tr>
+           
+
+              </tbody>
+            </table>
+
+                <!-- Modal -->
+  <div class="modal fade" id="macdonald"  data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">menu</h4>
+        </div>
+        <div class="modal-body">
+         <!--  -->
+  
+         <div class="row">
+          <div class="  col-xs-12">
+            <table class="table" style=" margin-top: 15px;">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Picture</th>
+                 
+                  <th scope="col">meal name</th>
+               
+                  <th scope="col">price</th>
+                  <th scope="col">Quantity</th>
+                
+                  <th scope="col">Order check</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td><img src="Picture/1.jpg" with="50" heigh="10" alt="Hamburger"></td>
+                
+                  <td>Hamburger</td>
+                
+                  <td>80 </td>
+                  <td>20 </td>
+              
+                  <td> <input type="checkbox" id="cbox1" value="Hamburger"></td>
+                </tr>
+                <tr>
+                  <th scope="row">2</th>
+                  <td><img src="Picture/2.jpg" with="10" heigh="10" alt="coffee"></td>
+                 
+                  <td>coffee</td>
+             
+                  <td>50 </td>
+                  <td>20</td>
+              
+                  <td><input type="checkbox" id="cbox2" value="coffee"></td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+        
+
+         <!--  -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Order</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+          </div>
+
+        </div>
+      </div>
+      <div id="menu1" class="tab-pane fade">
+
+        <h3> Start a business </h3>
+        <div class="form-group ">
+          <div class="row">
+            <div class="col-xs-2">
+              <label for="ex5">shop name</label>
+              <input class="form-control" id="ex5" placeholder="macdonald" type="text" >
+            </div>
+            <div class="col-xs-2">
+              <label for="ex5">shop category</label>
+              <input class="form-control" id="ex5" placeholder="fast food" type="text" >
+            </div>
+            <div class="col-xs-2">
+              <label for="ex6">latitude</label>
+              <input class="form-control" id="ex6" placeholder="121.00028167648875" type="text" >
+            </div>
+            <div class="col-xs-2">
+              <label for="ex8">longitude</label>
+              <input class="form-control" id="ex8" placeholder="24.78472733371133" type="text" >
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class=" row" style=" margin-top: 25px;">
+          <div class=" col-xs-3">
+            <button type="button" class="btn btn-primary"  >register</button>
+          </div>
+        </div>
+        <hr>
+        <h3>ADD</h3>
+
+        <div class="form-group ">
+          <div class="row">
+
+            <div class="col-xs-6">
+              <label for="ex3">meal name</label>
+              <input class="form-control" id="ex3" type="text">
+            </div>
+          </div>
+          <div class="row" style=" margin-top: 15px;">
+            <div class="col-xs-3">
+              <label for="ex7">price</label>
+              <input class="form-control" id="ex7" type="text">
+            </div>
+            <div class="col-xs-3">
+              <label for="ex4">quantity</label>
+              <input class="form-control" id="ex4" type="text">
+            </div>
+          </div>
+
+
+          <div class="row" style=" margin-top: 25px;">
+
+            <div class=" col-xs-3">
+              <label for="ex12">上傳圖片</label>
+              <input id="myFile" type="file" name="myFile" multiple class="file-loading">
+
+            </div>
+            <div class=" col-xs-3">
+
+              <button style=" margin-top: 15px;" type="button" class="btn btn-primary">Add</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="  col-xs-8">
+            <table class="table" style=" margin-top: 15px;">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Picture</th>
+                  <th scope="col">meal name</th>
+              
+                  <th scope="col">price</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Edit</th>
+                  <th scope="col">Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td><img src="Picture/1.jpg" with="50" heigh="10" alt="Hamburger"></td>
+                  <td>Hamburger</td>
+                
+                  <td>80 </td>
+                  <td>20 </td>
+                  <td><button type="button" class="btn btn-info" data-toggle="modal" data-target="#Hamburger-1">
+                  Edit
+                  </button></td>
+                  <!-- Modal -->
+                      <div class="modal fade" id="Hamburger-1" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="staticBackdropLabel">Hamburger Edit</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <div class="row" >
+                                <div class="col-xs-6">
+                                  <label for="ex71">price</label>
+                                  <input class="form-control" id="ex71" type="text">
+                                </div>
+                                <div class="col-xs-6">
+                                  <label for="ex41">quantity</label>
+                                  <input class="form-control" id="ex41" type="text">
+                                </div>
+                              </div>
+                    
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Edit</button>
+                             
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  <td><button type="button" class="btn btn-danger">Delete</button></td>
+                </tr>
+                <tr>
+                  <th scope="row">2</th>
+                  <td><img src="Picture/2.jpg" with="10" heigh="10" alt="coffee"></td>
+                  <td>coffee</td>
+               
+                  <td>50 </td>
+                  <td>20</td>
+                  <td><button type="button" class="btn btn-info" data-toggle="modal" data-target="#coffee-1">
+                    Edit
+                    </button></td>
+                    <!-- Modal -->
+                        <div class="modal fade" id="coffee-1" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">coffee Edit</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <div class="row" >
+                                  <div class="col-xs-6">
+                                    <label for="ex72">price</label>
+                                    <input class="form-control" id="ex72" type="text">
+                                  </div>
+                                  <div class="col-xs-6">
+                                    <label for="ex42">quantity</label>
+                                    <input class="form-control" id="ex42" type="text">
+                                  </div>
+                                </div>
+                      
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Edit</button>
+                               
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+
+                  <td><button type="button" class="btn btn-danger">Delete</button></td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+
+      </div>
+
+
+
+    </div>
+  </div>
+
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script> -->
+  <script>
+    $(document).ready(function () {
+      $(".nav-tabs a").click(function () {
+        $(this).tab('show');
+      });
+    });
+  </script>
+
+  <!-- Option 2: Separate Popper and Bootstrap JS -->
+  <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    -->
 </body>
 
 </html>
