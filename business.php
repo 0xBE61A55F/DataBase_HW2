@@ -2,7 +2,7 @@
 require 'connect.php';
 try {
     $sql = "CREATE TABLE business (
-    ID INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+    BID INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
     ShopName VARCHAR(50) NOT NULL,
     ShopCategory VARCHAR(50) NOT NULL,
     Latitude float(50) NOT NULL,
