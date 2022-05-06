@@ -1,11 +1,50 @@
 <?php session_start(); ?>
 
 <?php
+/*
+class Member{
 
+	public function showMember(){
+		$r_name = $this->Name;
+		$r_account = $this->Account;
+		$r_phone = $this->PhoneNumber;
+		$r_lat = $this->Latitude;
+		$r_long = $this->Longitude;
+	}
+}
+*/
 if ($_SESSION['LoginSuccess'] == False){
 	header("location:login.php");
 }else{
-	echo $_SESSION['uname'];
+	include 'connect.php';
+	$sql = "SELECT * FROM mytable WHERE Account = ?";
+	
+	$stm = $db->prepare($sql);
+	$stm->execute(array($_SESSION['account']));
+
+	/*
+	$row = $stm->fetchObject("Member");
+	$row->showMember();
+	*/
+
+	$row = $stm->fetch(PDO::FETCH_ASSOC);
+
+	$r_name = $row['Name'];
+	$r_account = $row['Account'];
+	$r_phone = $row['PhoneNumber'];
+	$r_lat = $row['Latitude'];
+	$r_long = $row['Longitude'];
+
+	if (isset($_POST['edit_lat'])){  //修改經緯度
+		
+		$latitude = $_POST['latitude'];
+		$longitude = $_POST['longitude'];
+		
+		$sql = "UPDATE mytable SET Latitude = ?,Longitude = ? WHERE Account = ?";
+		$u_stm = $db->prepare($sql);
+		$u_stm->execute(array($latitude,$longitude,$r_account));
+		header('location:index.php');
+	}
 }
 
 ?>
@@ -54,8 +93,11 @@ if ($_SESSION['LoginSuccess'] == False){
       <div id="home" class="tab-pane fade in active">
         <h3>Profile</h3>
         <div class="row">
-          <div class="col-xs-12">
-            Accouont: <?php echo $_SESSION['uname'];?>, user, PhoneNumber: 0912345678,  location: 24.786944626633865, 120.99753981198887
+          <div style="line-height:30px;" class="col-xs-12">
+            Accouont: <?php echo $r_account;?><br>
+			Name:<?php echo $r_name;?><br> 
+			PhoneNumber: <?php echo $r_phone;?><br>  
+			location: <?php echo $r_lat;?>,<?php echo $r_long;?>
             
             <button type="button " style="margin-left: 5px;" class=" btn btn-info " data-toggle="modal"
             data-target="#location">edit location</button>
@@ -68,15 +110,19 @@ if ($_SESSION['LoginSuccess'] == False){
                     <h4 class="modal-title">edit location</h4>
                   </div>
                   <div class="modal-body">
+
+				<form method="POST">
                     <label class="control-label " for="latitude">latitude</label>
-                    <input type="text" class="form-control" id="latitude" placeholder="enter latitude">
+                    <input type="text" class="form-control" name="latitude" id="latitude" placeholder="enter latitude">
                       <br>
                       <label class="control-label " for="longitude">longitude</label>
-                    <input type="text" class="form-control" id="longitude" placeholder="enter longitude">
+                    <input type="text" class="form-control" name="longitude" id="longitude" placeholder="enter longitude">
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Edit</button>
+				  <input type="submit" value="Edit" name="edit_lat" class="btn btn-primary">
                   </div>
+				</form>
+
                 </div>
               </div>
             </div>

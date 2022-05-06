@@ -1,4 +1,10 @@
-<?php session_start(); ?>
+<?php session_start(); 
+
+if ($_SESSION['LoginSuccess'] == true){
+	header("location:index.php"); 
+}
+
+?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 <?php
@@ -26,7 +32,13 @@ if(isset($_POST["submit"]) && $_POST["submit"] == "Sign Up")
 	if($name == "" || $phone == "" || $account == "" || $pass == "" || $repass == "" || $latitude == "" || $longitude == "")  
 	{  
 		echo "<script>alert('請不要留空！'); history.go(-1);</script>";  
-	}
+	}else{
+	
+		if ($pass != $repass){
+			echo "<script>alert('兩次密碼不同！'); history.go(-1);</script>";
+			die;
+		}
+	
 	#$sql = "insert into member_table values('$name','$phone','$account','$pass','$latitude', '$longitude');";
     $insert = $db -> prepare("INSERT INTO mytable(Name,Account,PhoneNumber,Password,Latitude,Longitude)VALUES(?,?,?,?,?,?)");
 	
@@ -41,7 +53,7 @@ if(isset($_POST["submit"]) && $_POST["submit"] == "Sign Up")
         $db = null;
 
 		$_SESSION['LoginSuccess'] = True;
-		$_SESSION['uname'] = $name;
+		$_SESSION['account'] = $account;
 ?>
 
 	<script>
@@ -64,6 +76,7 @@ if(isset($_POST["submit"]) && $_POST["submit"] == "Sign Up")
 	</script>
 <?php
         }
+	}
 
 }
 
@@ -164,6 +177,7 @@ if(isset($_POST["submit"]) && $_POST["submit"] == "Sign Up")
 						<div class="form-group">
 							<label for="re-password" class="sr-only">Re-type Password</label>
 							<input type="password" class="form-control" id="re-password" name="repass" placeholder="Re-type Password" autocomplete="off">
+							<p id="checkpass">
 						</div>
 						<div class="form-group">
 							<label for="latitude" class="sr-only">latitude</label>
@@ -230,6 +244,20 @@ if(isset($_POST["submit"]) && $_POST["submit"] == "Sign Up")
 				}
 			});
 
+		});
+
+		$("#re-password").blur(function(){
+			var pwd1 = document.getElementById("password").value;
+			var pwd2 = document.getElementById("re-password").value;
+			console.log(pwd1);
+			console.log(pwd2);
+			if (pwd1 != pwd2){
+				$("#checkpass").html("兩次密碼不同");
+				$("#checkpass").css("color","red");
+			}else{
+				$("#checkpass").html("兩次密碼相同");
+				$("#checkpass").css("color","blue");
+			}
 		});
 
 	});

@@ -28,6 +28,7 @@ if(isset($_POST["submit"])){
 
 		if( $result ) {
 			$_SESSION['LoginSuccess'] = true;
+			$_SESSION['account'] = $Account;
 			header("location:index.php"); 
 		}
 		else {
