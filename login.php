@@ -1,8 +1,11 @@
 <?php session_start(); 
 
-if ($_SESSION['LoginSuccess'] == true){
-	header("location:index.php"); 
+if (isset($_SESSION['account']) || isset($_SESSION['LoginSuccess'])){
+	if ($_SESSION['LoginSuccess'] == true){
+		header("location:index.php"); 
+	}
 }
+
 ?>
 <?php
 if(isset($_POST["submit"])){
