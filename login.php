@@ -17,7 +17,7 @@ if(isset($_POST["submit"])){
 		$Account = $_POST['Account'];
 		$Password = $_POST['Password'];
 		$password_hash=hash("sha512", $Password);
-		echo $password_hash;
+
 		#$Password = md5($_POST['Password']);
 
 		$sql = "SELECT * FROM `mytable` Where (Account = ? AND Password = ?)";	
