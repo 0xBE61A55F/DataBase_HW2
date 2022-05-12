@@ -1,7 +1,9 @@
 <?php session_start(); 
 
-if ($_SESSION['LoginSuccess'] == true){
-	header("location:index.php"); 
+if (isset($_SESSION['account']) || isset($_SESSION['LoginSuccess'])){
+	if ($_SESSION['LoginSuccess'] == true){
+		header("location:index.php"); 
+	}
 }
 
 ?>
@@ -204,7 +206,7 @@ if(isset($_POST["submit"]) && $_POST["submit"] == "Sign Up")
 				<div class="col-md-12 text-center"><p><small>&copy; All Rights Reserved. Designed by <a href="https://freehtml5.co">FreeHTML5.co</a></small></p></div>
 			</div>
 		</div>
-	
+	<div id="map"></div>
 	<!-- jQuery -->
 	<script src="js/jquery.min.js"></script>
 	<!-- Bootstrap -->
@@ -215,11 +217,6 @@ if(isset($_POST["submit"]) && $_POST["submit"] == "Sign Up")
 	<script src="js/jquery.waypoints.min.js"></script>
 	<!-- Main JS -->
 	<script src="js/main.js"></script>
-
-	</body>
-
-
-
 
 	<script>
 
@@ -263,4 +260,7 @@ if(isset($_POST["submit"]) && $_POST["submit"] == "Sign Up")
 	});
 
 </script>
+
+	</body>
+
 </html>
