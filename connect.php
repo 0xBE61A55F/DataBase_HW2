@@ -1,8 +1,8 @@
 <?php
 
     $dbhost = "localhost";
-    $username = "giwawa";
-    $password = "1qaz@WSX";
+    $username = "kevin";
+    $password = "123";
     $dbname = "test";
     $dbcharacter = "utf8mb4";
 

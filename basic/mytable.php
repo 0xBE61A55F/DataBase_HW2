@@ -8,7 +8,8 @@ try {
     PhoneNumber VARCHAR(10) NOT NULL,
     Password VARCHAR(1000) NOT NULL,
     Latitude float(50) NOT NULL,
-    Longitude float(50) NOT NULL
+    Longitude float(50) NOT NULL,
+    Wallet INT NOT NULL
     )";
 
     $db->exec($sql);
